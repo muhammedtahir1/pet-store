@@ -21,7 +21,7 @@ export default function PetList() {
               {
                 'bg-[#EFF1F2]' : selectedPetId === pet.id
               }
-            )} onClick={()=> handleChangeSelectedPetId(pet.id)}> 
+            )}          onClick={()=> handleChangeSelectedPetId(pet.id)}> 
               <Image
                 src={pet.imageUrl}
                 alt="Pet image"
@@ -33,6 +33,8 @@ export default function PetList() {
             </button>
         </li>
       ))}
+
+
 
     </ul>
   )

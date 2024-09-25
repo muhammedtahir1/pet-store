@@ -1,24 +1,27 @@
 "use client";
 
 import { Pet } from "@/lib/types";
-import { useState , createContext} from "react"
+import { useState, createContext } from "react"
 
 type PetContextProviderProps = {
     data: Pet[],
-    children : React.ReactNode
+    children: React.ReactNode
 }
 
 type TPetContext = {
-    pets : Pet[],
-    selectedPetId : string | null;
-    selectedPet : Pet | undefined ;
-    handleChangeSelectedPetId : (id : string) => void;
-    numberOfPets : number
+    pets: Pet[],
+    selectedPetId: string | null;
+    selectedPet: Pet | undefined;
+    handleCheckoutPet: (id: string) => void;
+    handleChangeSelectedPetId: (id: string) => void;
+    handleAddPet: (newPet: Omit<Pet, "id">) => void;
+    handleEditPet : (petId : string, newPetData : Omit<Pet , "id">) => void;
+    numberOfPets: number
 }
 
 export const PetContext = createContext<TPetContext | null>(null);
 
-export default function PetContextProvider({data , children} : PetContextProviderProps) {
+export default function PetContextProvider({ data, children }: PetContextProviderProps) {
 
     // state
     const [pets, setPets] = useState(data)
@@ -29,19 +32,49 @@ export default function PetContextProvider({data , children} : PetContextProvide
     const numberOfPets = pets.length
 
     // event handlers / actions
-    const handleChangeSelectedPetId = (id : string) => {
+
+    const handleEditPet = (petId : string, newPetData : Omit<Pet , "id">) => {
+        setPets((prev) => 
+            prev.map((pet)=> {
+            if(pet.id === petId){
+                return {
+                    id: petId,
+                    ...newPetData,
+                }
+            }
+            return pet
+        }))
+    }
+
+    const handleAddPet = (newPet: Omit<Pet, 'id'>) => {
+        setPets((prev) => [...prev, {
+            id: Date.now().toString(),
+            ...newPet
+        },
+        ])
+    }
+
+    const handleCheckoutPet = (id: string) => {
+        setPets((prev) => prev.filter(pet => pet.id !== id))
+        setSelectedPetId(null)
+    }
+
+    const handleChangeSelectedPetId = (id: string) => {
         setSelectedPetId(id)
     }
 
-  return (
-    <PetContext.Provider value={{
-        pets,
-        selectedPetId,
-        selectedPet,
-        handleChangeSelectedPetId,
-        numberOfPets
-    }}>
-        {children}
-    </PetContext.Provider>
-  )
+    return (
+        <PetContext.Provider value={{
+            pets,
+            selectedPetId,
+            selectedPet,
+            handleChangeSelectedPetId,
+            handleCheckoutPet,
+            handleAddPet,
+            handleEditPet,
+            numberOfPets
+        }}>
+            {children}
+        </PetContext.Provider>
+    )
 }
