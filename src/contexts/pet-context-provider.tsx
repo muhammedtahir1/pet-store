@@ -1,5 +1,6 @@
 "use client";
 
+import { addPet } from "@/actions/actions";
 import { Pet } from "@/lib/types";
 import { useState, createContext } from "react"
 
@@ -15,16 +16,17 @@ type TPetContext = {
     handleCheckoutPet: (id: string) => void;
     handleChangeSelectedPetId: (id: string) => void;
     handleAddPet: (newPet: Omit<Pet, "id">) => void;
-    handleEditPet : (petId : string, newPetData : Omit<Pet , "id">) => void;
+    handleEditPet: (petId: string, newPetData: Omit<Pet, "id">) => void;
     numberOfPets: number
 }
 
 export const PetContext = createContext<TPetContext | null>(null);
 
-export default function PetContextProvider({ data, children }: PetContextProviderProps) {
+export default function PetContextProvider(
+    { data : pets, children }: PetContextProviderProps) {
 
     // state
-    const [pets, setPets] = useState(data)
+    // const [pets, setPets] = useState(data)
     const [selectedPetId, setSelectedPetId] = useState<string | null>(null)
 
     // derived state
@@ -33,25 +35,28 @@ export default function PetContextProvider({ data, children }: PetContextProvide
 
     // event handlers / actions
 
-    const handleEditPet = (petId : string, newPetData : Omit<Pet , "id">) => {
-        setPets((prev) => 
-            prev.map((pet)=> {
-            if(pet.id === petId){
-                return {
-                    id: petId,
-                    ...newPetData,
+    const handleEditPet = (petId: string, newPetData: Omit<Pet, "id">) => {
+        setPets((prev) =>
+            prev.map((pet) => {
+                if (pet.id === petId) {
+                    return {
+                        id: petId,
+                        ...newPetData,
+                    }
                 }
-            }
-            return pet
-        }))
+                return pet
+            }))
     }
 
-    const handleAddPet = (newPet: Omit<Pet, 'id'>) => {
-        setPets((prev) => [...prev, {
-            id: Date.now().toString(),
-            ...newPet
-        },
-        ])
+    const handleAddPet = async (newPet: Omit<Pet, 'id'>) => {
+        // setPets((prev) => [...prev, {
+        //     id: Date.now().toString(),
+        //     ...newPet
+        // },
+        // ])
+        
+        await addPet(newPet);
+
     }
 
     const handleCheckoutPet = (id: string) => {
