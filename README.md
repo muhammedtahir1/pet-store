@@ -25,3 +25,45 @@
     - integrated with server actions
     - const {pending} = useFormStatus()
     - gives pending state to display while the data is being manipulated ex: add & then loading button
+
+-> useOptimistic - 
+    - it is similar to useState
+    - why do we need to use this? 
+        - in a full stack application, when the user performs CRUD operation, the actions will take some time to store the data into the database, then later fetch the updated data and optimize the UI. So this is a bad user experience to wait for so long.
+    - what we do to solve this problem?
+        - in most of the cases the operation is going to be successfull, so we just display the data within a fraction of time, while in the backend the actual data processes.
+
+    - working
+        1. it takes two parameters - initial data, 2nd is a function that contains the prev(state) data and the new data
+        2. it returns the prev data combining with new data
+
+        ```tsx
+            const [optimisticList, setOptimisticList] = useOptimistic(data, (state, newData)=>{
+                return [...state, newData]
+            })
+
+            // use setOptimisticList before any server action
+            handleAdd(newData){
+                setOptimisticList(newData)
+                // ...server action
+            }
+
+            // use optimisticList 
+        ```
+
+        - Note : 
+            Even if something goes wrong in the database, and the ui changes are already made using optimistic ui. No worries it will check whether the data has been successfully added into the db, if not it will remove the ui.
+        - Downside :
+            It will be glitchy when you try to access the data very fast - right after the ui is changed using optimistic ui. Its because it will take some time to revalidate the path, and store the actual data. It will be absolutely fine after that
+
+
+-> Omit - 
+    It is a typescript feature which is used to omit few things from an existing type, and use this new type somewhere else
+    Ex: Here it omits id from type Pet
+
+    ```tsx
+    addPet(newPet : Omit<Pet, "id">)    
+
+    // getting one thing out of a type
+    deletePet(petId : Pet["id"])
+    ```
