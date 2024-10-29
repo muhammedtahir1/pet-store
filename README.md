@@ -67,3 +67,43 @@
     // getting one thing out of a type
     deletePet(petId : Pet["id"])
     ```
+
+3. User database model
+
+- Hashed Password:
+    If you store the email & password directly in the database, and the database is compromised - the person will get the access to the user details (which is not good)
+
+    So hashing password means - the password is stored in some strange string, and there will be a secret key to decode that string. So the password of the user will be safe even the data gets leaked (unless the hacker gets hold to the secret key that is used to decode the hashedPassword)
+
+    - hackers may find the original password ex: through brute force 
+
+    - NPM package -> bcrypt : used to hash passwords (to safely store a password)  
+
+
+- Types of relations in prisma - 3
+    1. One-to-one (also called 1-1 relations)
+    2. One-to-many (also called 1-n relations)
+    3. Many-to-many (also called m-n relations)
+
+    - Ex: One to many
+    ```tsx
+
+    model User{
+        id      @id     @default(cuid()) 
+        ...
+        pets    Pet[]
+    }
+
+    model Pet {
+        ...
+        User    User    @relation(fields: [userId], references: [id])
+        userId  String
+    }
+
+    ```
+
+- Difference between (after modifying the schema)
+    prisma db push      and      prisma migrate dev
+    (written in notes)
+
+4. Next Auth
