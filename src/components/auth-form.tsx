@@ -10,7 +10,7 @@ type AuthFormProps = {
   type: "logIn" | "signUp"
 }
 
-export default function AuthForm({ type }: AuthFormProps) {
+export default function AuthForm({ type }: AuthFormProps) { 
 
   const [signUpError, dispatchSignUp] = useFormState(signUp, undefined)
   const [logInError, dispatchLogIn] = useFormState(logIn, undefined)

@@ -182,4 +182,40 @@ export const {auth} = NextAuth(config)
 7. Loading state 
     - while using action attribute
     - hook -> useFormStatus()
+
+    ```tsx
+        const {pending} = useFormStatus()
+
+        <Button disabled={pending}>
+            login/signin
+        </Button>
+    ```
+
+8. Loading state (2)
+    - using useTransition hook
+    - it gives pending state (boolean), while some function is being performed
+        - how to use
+        - wrap startTransition function onto any function
+        - then use isPending state on the button
+
     
+    ```tsx
+        const [isPending, startTransition] = useTransition()
+
+        <Button 
+            disabled={isPending}
+            
+            onClick(()=>{
+                startTransition(async ()=> {
+                    await logOut()
+                })
+            })
+        >
+            SignOut
+        </Button>
+    ```
+
+9. Hook to display error message
+    - useFormState()
+    - kinda complex
+
