@@ -106,4 +106,80 @@
     prisma db push      and      prisma migrate dev
     (written in notes)
 
-4. Next Auth
+4. Next Auth - Authjs (now)
+
+note: a lot of boiler plate & configuration to set up auth js
+
+#### Flow - LOGIN
+- The user is already created in the database
+    - now, we need to send the form data / user data from login form to the server.
+    - the formData is then verified with the gmail & hashed password present in the database
+    - the hashed password is decrypted to compare it with the formData
+    - if the user credentials are credible
+- next auth has a function called signIn -> helps to set a cookie env into the client browser and send a JSON web token
+    - so that the user does not have to repeatedly enter its credentials, while requesting the authenticated route.
+    - the server will directly check the token present in the clients browser, if its legit, the user will be allowed to access authenticated routes.
+
+
+#### next auth config
+check auth.ts files
+```tsx
+// auth.ts
+import NextAuth, { NextAuthConfig } from "next-auth"
+
+const config = {
+    pages: {
+        signIn: "/login",
+    },
+    session: {
+        maxAge: 30 * 24 * 60 * 60,
+        strategy: "jwt"
+    },
+    callbacks: {
+        authorized: ({request})=> {
+            const isTryingToAccessApp = request.nextUrl.pathname.includes("/app")
+            if(isTryingToAccessApp){
+                return false
+            }else{
+                return true
+            }
+        }
+    },
+    providers: [],
+
+} satisfies NextAuthConfig
+
+export const {auth} = NextAuth(config)
+```
+
+- Generate auth secret from OpenSSL using git bash - command
+-> openssl rand -base64 32
+
+-> Pros of using Server actions 
+- "action" attribute
+- progressive enhancement
+- does not have 
+
+-> Authjs
+- Note: 
+    - It just provides `login / signIn` and `signOut` functions
+    - it does not provide function to create a new user i.e `signUp`
+        - we need to manually create a user and give him a cookie token using `signIn` function
+
+
+5. Connect pet -> users
+    - in prisma schema
+    - 
+
+
+
+6. difference btw 
+    - server-only package : it is an npm package and it is used to make sure that the component code runs only on server.
+    used as ->  import "server-only"
+
+    - use server : Inbuild and makes the component as server action, which will run only on server
+
+7. Loading state 
+    - while using action attribute
+    - hook -> useFormStatus()
+    

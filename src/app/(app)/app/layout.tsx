@@ -5,10 +5,15 @@ import PetContextProvider from "@/contexts/pet-context-provider";
 import SearchContextProvider from "@/contexts/search-context-provider";
 import prisma from "@/lib/db";
 import { Toaster } from "@/components/ui/sonner";
+import { checkAuth, getPetsByUserId } from "@/lib/server-utils";
 
 export default async function Layout({ children }: { children: React.ReactNode }) {
 
-	const pets = await prisma.pet.findMany({})
+	const session = await checkAuth()
+
+	// console.log(session.user);	
+
+	const pets = await getPetsByUserId(session.user.id)
 	
 
 	// const response = await fetch("https://bytegrad.com/course-assets/projects/petsoft/api/pets")

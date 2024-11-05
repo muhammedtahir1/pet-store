@@ -55,14 +55,14 @@ export default function PetForm({
 		formState: { errors }
 	} = useForm<TPetForm>({
 		resolver: zodResolver(petFormSchema),
-		defaultValues : {
+		defaultValues: actionType === "edit" ? {
 			name: selectedPet?.name,
-			ownerName : selectedPet?.ownerName,
-			imageUrl : selectedPet?.imageUrl,
-			age : selectedPet?.age,
-			notes : selectedPet?.notes
-		}
-	}) 
+			ownerName: selectedPet?.ownerName,
+			imageUrl: selectedPet?.imageUrl,
+			age: selectedPet?.age,
+			notes: selectedPet?.notes
+		} : undefined
+	})
 
 
 	return (
@@ -70,7 +70,7 @@ export default function PetForm({
 			action={async (formData) => {
 
 				const result = await trigger()
-				if(!result) return;
+				if (!result) return;
 
 				onFormSubmission();
 

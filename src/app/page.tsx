@@ -5,7 +5,7 @@ import Link from "next/link";
 
 export default function Home() {
   return (
-    <main className="bg-[#787A6C] py-10 px-4 md:px-0 xl:py-0 min-h-screen flex flex-col xl:flex-row items-center justify-center gap-10">
+    <main className="bg-[#29246C] text-white py-10 px-4 md:px-0 xl:py-0 min-h-screen flex flex-col-reverse md:flex-row items-center justify-center gap-10">
       <Image
         src="https://bytegrad.com/course-assets/react-nextjs/petsoft-preview.png"
         alt="Preview of PetSoft"

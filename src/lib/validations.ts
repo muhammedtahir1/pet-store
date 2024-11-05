@@ -29,3 +29,11 @@ export const petFormSchema = z.object({
 }))
 
 export type TPetForm = z.infer<typeof petFormSchema>
+
+
+export const authSchema = z.object({
+	email : z.string().email().max(50),
+	password: z.string().max(40)
+})
+
+export type TAuth = z.infer<typeof authSchema>
