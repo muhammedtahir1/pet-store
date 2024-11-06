@@ -7,7 +7,7 @@ import AuthFormBtn from "./auth-form-btn";
 import { useFormState } from "react-dom";
 
 type AuthFormProps = {
-  type: "logIn" | "signUp"
+  type: "logIn" | "signUp";
 }
 
 export default function AuthForm({ type }: AuthFormProps) { 
